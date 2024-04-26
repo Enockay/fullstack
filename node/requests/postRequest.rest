@@ -1,0 +1,17 @@
+
+POST http://localhost:3002/add/notes
+Content-Type: application/json
+
+{
+  "note" : "testing restClient",
+   "important" : false
+}
+
+###
+GET http://localhost:3002/api/notes
+
+###
+GET  http://localhost:3002/
+
+###
+DELETE   http://localhost:3002/api/delete/2
