@@ -9,7 +9,7 @@ function App() {
   const [data, setData] = useState("");
   const [error, setError] = useState("");
 
-  const baseUrl = "http://localhost:3002/api/notes";
+  const baseUrl = "/api/notes";
 
   const getData = async () => {
     try{
@@ -35,6 +35,7 @@ function App() {
       </>
     )
   }
+  
   return (
     <>
        <div className='greetings'>
