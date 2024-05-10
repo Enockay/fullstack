@@ -1,13 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 const connectDb = require("./dbconnect");
-const {insertData,fetchAll} = require("./modules");
+const { fetchAll, note } = require("./modules");
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 app.use(express.static('dist')); // frontend beoing part of backend 
 
+
+connectDb();
 
 app.post("/add/notes", (req, res) => {
   const note = req.body;
@@ -41,17 +43,36 @@ let notes = [
   }
 ];
 
-app.get("/connectDb", async (req, res) => {
-  const response = await connectDb();
-  
-  if(response == 0){
-    //const data = await insertData();
-     const fetchData = await fetchAll();
-    res.status(200).json({ success: true, message: fetchData})
-  }else{
-    res.status(500).json({success : true, message : response});
-  }
- 
+app.put("/api/put/:id", (req, res) => {
+  const id = req.params.id;
+  const { content, important } = req.body;
+
+  note.findByIdAndUpdate(id,
+    { content, important },
+    { new: true, runValidator: true, context: 'query' }
+  )
+    .then(updatedNote => {
+      res.status(200).json({ updatedNote })
+    })
+    .catch(error => {
+      res.status(400).json({ error })
+    })
+
+});
+
+app.get("/connectDb", async (req, res, next) => {
+  try {
+    const response = await connectDb();
+    if (response == 0) {
+      //const data = await insertData();
+      const fetchData = await fetchAll();
+      res.status(200).json({ success: true, message: fetchData })
+    } else {
+      res.status(500).json({ success: true, message: response });
+    }
+  } catch (error) {
+    console.log(next(error));
+  };
 });
 
 app.get("/", (req, res) => {

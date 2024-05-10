@@ -17,7 +17,9 @@ dataSchema.set('toJSON',{
         delete returnedId;
         delete item._v
     } 
-})
+});
+
+mongoose.set('strictQuery',false);
 
 const note = mongoose.model("Notes", dataSchema);
 
@@ -67,4 +69,4 @@ const fetchAll = async ()=> {
 
 }
 
-module.exports =  { insertFunction,fetchAll}
+module.exports =  { insertFunction,fetchAll,note}
